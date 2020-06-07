@@ -1,0 +1,161 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Security.Policy;
+using UnityEngine;
+
+public class AudioCtrl2 : MonoBehaviour {
+
+	public Sound[] sounds;
+
+	private void Awake()
+	{
+		foreach (var s in sounds)
+		{
+			s.source = gameObject.AddComponent<AudioSource>();
+			s.source.clip = s.clip;
+		}
+	
+	
+	}
+
+	public void Play(string name)
+	{
+		Sound s = Array.Find(sounds,sound => sound.name == name);
+		s.source.Play();
+	}
+
+	public void Stop(string name)
+	{
+		Sound s = Array.Find(sounds,sound => sound.name == name);
+		if (s.source.isPlaying)
+		{
+			s.source.Stop();
+		}
+	
+	}
+
+
+
+}
+==================================================
+
+
+
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[System.Serializable]
+public class Sound {
+
+    public AudioClip clip;
+
+    public string name;
+    [HideInInspector]
+    public AudioSource source;
+
+
+
+}
+
+
+
+==============================
+
+
+
+
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[System.Serializable]
+public class ParticleEffect {
+
+
+    public Transform initPos;
+    public ParticleSystem particle;
+    public string name;
+
+
+
+}
+
+
+
+============================
+
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class ParticleManager2 : MonoBehaviour {
+
+    public ParticleEffect[] particles;
+
+    public void PlayEffectFromTransform(string name, Transform _transform)
+    {
+        var particle  = Array.Find(particles, particles => particles.name == name);
+
+        Instantiate(particle.particle, _transform.position, Quaternion.identity);
+    }
+
+    public void PlayEffect(string name)
+    {
+        var particle = Array.Find(particles, particles => particles.name == name);
+        if (particle.initPos != null)
+            Instantiate(particle.particle, particle.initPos.position, Quaternion.identity);
+        else
+        {
+        }
+    }
+}
+
+======================
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class MyTest1 : MonoBehaviour {
+
+	private AudioCtrl audioCtrl;
+
+	private AudioCtrl2 audioCtrl2;
+
+
+	public AudioClip audio;
+
+
+	private ParticleManager2 manager;
+
+	public Transform target1;
+	public Transform target2;
+
+	// Use this for initialization
+	void Start () {
+
+		audioCtrl2 = FindObjectOfType<AudioCtrl2>();
+		manager = FindObjectOfType<ParticleManager2>();
+
+		manager.PlayEffectFromTransform("broken",target1.transform);
+
+		audioCtrl2.Play("back");
+		Debug.LogError("111");
+
+	}
+
+}
+
+
+
+
+
+
+
+
