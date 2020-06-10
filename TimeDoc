@@ -1,2 +1,44 @@
 Timer
  --text
+
+
+
+public class SetTimer : MonoBehaviour
+{
+ [SerializeField]
+ private int minute;
+ [SerializeField]
+ private float seconds;
+ 
+ private float oldSeconds;
+ private Text timer;
+ 
+ void Start()
+ {
+   minute = 0;
+   seconds = 0f;
+   oldSeconds = 0f;
+   timer = GetComponentInChildren<Text>();
+  
+ }
+ 
+ void Update()
+ {
+  seconds +=  Time.deltaTime;
+  if(seconds >= 60f)
+  {
+   minute++;
+   seconds = seconds - 60;
+  }
+  
+  if((int)seconds != (int)oldSeconds)
+  {
+   timer.text = minute.toString("00") + ":" + ((int)seconds).toString("00");
+  }
+  oldSeconds = seconds;
+ 
+ }
+
+
+
+}
